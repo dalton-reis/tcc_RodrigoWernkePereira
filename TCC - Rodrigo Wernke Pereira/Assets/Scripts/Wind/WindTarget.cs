@@ -11,9 +11,8 @@ public class WindTarget : MonoBehaviour
 
     void Update()
     {
-        var foward = transform.forward;
+        var forward = transform.forward;
 
-        _textMesh.text = foward.x.ToString() + "x " + foward.y.ToString()
-            + "y " + foward.z.ToString() + "z";
+        _textMesh.text = forward.y.ToString() + "y";
     }
 }
