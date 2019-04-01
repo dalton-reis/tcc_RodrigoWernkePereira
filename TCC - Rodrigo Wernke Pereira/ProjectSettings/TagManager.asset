@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Tree
+  - Sun
   layers:
   - Default
   - TransparentFX
@@ -15,8 +16,8 @@ TagManager:
   - 
   - 
   - PostProcessing
-  - 
-  - 
+  - Sun
+  - Moon
   - 
   - 
   - 

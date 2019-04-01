@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 
-public class WindController : MonoBehaviour
+public class WindController
 {
     public void UpdateForces()
     {
         UpdateTreeForces();
+
+        UpdateRainForces();
     }
 
     private void UpdateTreeForces() {
@@ -21,9 +23,14 @@ public class WindController : MonoBehaviour
             //particleSystemForceOverTimeModule.z = 1;
 
             //balanço dos galhos das árvores
+
             var material = tree.GetComponentInChildren<MeshRenderer>().materials[1];
 
-            material.SetFloat("_tree_sway_speed", 2f);
+            material.SetFloat("_tree_sway_speed", 3f);
         }
+    }
+
+    private void UpdateRainForces() {
+
     }
 }
