@@ -23,12 +23,12 @@ public class DayNightCycle : MonoBehaviour {
     }
 
     private void Update() {
-        _initialPosition += Time.deltaTime * Speed;
+        _initialPosition += Speed * Time.deltaTime;
 
         float x = Mathf.Cos(_initialPosition) * Distance;
         float y = Mathf.Sin(_initialPosition) * Height;
         float z = 0;
 
-        transform.position = new Vector3(x, y, z);
+        transform.localPosition = new Vector3(x, y, z);
     }
 }

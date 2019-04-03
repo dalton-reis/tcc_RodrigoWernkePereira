@@ -6,10 +6,11 @@ public class SimulationController : MonoBehaviour
 
     void Start()
     {
+        Screen.orientation = ScreenOrientation.LandscapeRight;
+
         _windController = new WindController();
     }
 
-    // Update is called once per frame
     void Update()
     {
         _windController.UpdateForces();
