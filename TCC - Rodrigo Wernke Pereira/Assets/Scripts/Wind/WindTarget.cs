@@ -1,18 +1,24 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class WindTarget : MonoBehaviour
-{
+public class WindTarget : MonoBehaviour {
     private TextMesh _textMesh;
 
-    void Start()
-    {
-        _textMesh = GetComponentInChildren<TextMesh>();       
+    void Start() {
+        _textMesh = GetComponentInChildren<TextMesh>();
     }
 
-    void Update()
-    {
-        var forward = transform.forward;
+    void Update() {
+        var transform = GetComponentInChildren<Transform>();
 
-        _textMesh.text = forward.y.ToString() + "y";
+        var angle = transform.eulerAngles.y;
+
+        if (angle > 0 && transform.rotation.y < 0) {
+            angle = 0;
+        } else if (angle > 150) {
+            angle = 150;
+        }
+
+        _textMesh.text = Math.Round(angle).ToString();
     }
 }
