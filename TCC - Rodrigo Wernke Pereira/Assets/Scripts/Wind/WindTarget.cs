@@ -1,11 +1,16 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 
 public class WindTarget : MonoBehaviour {
-    private TextMesh _textMesh;
+
+    [SerializeField]
+    public TextMeshProUGUI panelText;
+
+    private TextMeshPro _text;
 
     void Start() {
-        _textMesh = GetComponentInChildren<TextMesh>();
+        _text = GetComponentInChildren<TextMeshPro>();
     }
 
     void Update() {
@@ -19,6 +24,7 @@ public class WindTarget : MonoBehaviour {
             angle = 150;
         }
 
-        _textMesh.text = Math.Round(angle).ToString();
+        _text.text = Math.Round(angle).ToString() + " km/h";
+        panelText.text = Math.Round(angle).ToString() + " km/h";
     }
 }
