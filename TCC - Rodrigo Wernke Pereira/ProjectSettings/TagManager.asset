@@ -7,6 +7,10 @@ TagManager:
   - Tree
   - Sun
   - Knob
+  - Clouds
+  - Water
+  - Temperature Target
+  - DebuggerText
   layers:
   - Default
   - TransparentFX
