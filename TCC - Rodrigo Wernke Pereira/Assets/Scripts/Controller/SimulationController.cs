@@ -8,6 +8,7 @@ public class SimulationController : MonoBehaviour
     private RainController _rainController;
     private WaterController _waterController;
     private TemperatureController _temperatureController;
+    private SnowController _snowController;
     private bool _sceneRestarted;
 
     void Start()
@@ -19,7 +20,7 @@ public class SimulationController : MonoBehaviour
         _rainController = new RainController();
         _temperatureController = new TemperatureController();
         _waterController = new WaterController();
-
+        _snowController = new SnowController();
         _sceneRestarted = false;
     }
 
@@ -27,11 +28,30 @@ public class SimulationController : MonoBehaviour
     {
         _windController.Update();
         _temperatureController.Update();
+        _snowController.Update(_temperatureController.Temperature);
         _cloudController.Update(_windController.WindForce, _temperatureController.Temperature);
         _rainController.Update(_cloudController.CorrectPosition);
         _waterController.Update(_temperatureController.Temperature, _rainController.Raining, _cloudController.CorrectPosition);
 
         RestartScene(_temperatureController.Temperature);
+    }
+
+    IEnumerator RestartSceneAfterSeconds()
+    {
+        yield return new WaitForSeconds(5);
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
+
+    void RestartScene(float temperature)
+    {
+        if (temperature > 250 && !_sceneRestarted)
+        {
+            RestartSceneEffects(temperature);
+            StartCoroutine(RestartSceneAfterSeconds());
+
+            _sceneRestarted = true;
+        }
     }
 
     void RestartSceneEffects(float temperature)
@@ -70,25 +90,6 @@ public class SimulationController : MonoBehaviour
         foreach (var water in waters)
         {
             water.SetActive(false);
-        }
-    }
-
-    IEnumerator RestartSceneAfterSeconds()
-    {
-        yield return new WaitForSeconds(5);
-
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-    }
-
-    void RestartScene(float temperature)
-    {
-        if (temperature > 250 && !_sceneRestarted)
-        {
-            Debug.Log(temperature);
-            RestartSceneEffects(temperature);
-            StartCoroutine(RestartSceneAfterSeconds());
-
-            _sceneRestarted = true;
         }
     }
 }

@@ -17,7 +17,7 @@ public class CloudController
 
         _cloudFinalPosition = _clouds.transform.localPosition;
 
-        _cloudFinalPosition.x = 0;
+        _cloudFinalPosition = Vector3.zero;
     }
 
     public void Update(float windForce, float temperature) {
