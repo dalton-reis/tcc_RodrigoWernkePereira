@@ -20,7 +20,7 @@ public class CloudController
         _cloudFinalPosition.x = 0;
     }
 
-    public void UpdateClouds(float windForce, float temperature) {
+    public void Update(float windForce, float temperature) {
         if (temperature >= 20) {
             _clouds.SetActive(true);
             ActiveClouds = true;

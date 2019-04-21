@@ -28,7 +28,7 @@ public class RainController {
     }
 
     //se a cena tem nuvens, faz chover de tempo em tempo.
-    public void UpdateRain(bool cloudsCorrectPosition) {
+    public void Update(bool cloudsCorrectPosition) {
         if (_clouds.activeSelf && _period > _checkInterval) {
 
             foreach (var rainParticleSystem in _rainParticleSystems) {

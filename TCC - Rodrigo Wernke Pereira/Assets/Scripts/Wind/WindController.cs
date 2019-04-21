@@ -1,65 +1,89 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class WindController {
+public class WindController
+{
+    private GameObject _windTarget;
+    private Material _treeBranches;
+    private GameObject[] _trees;
+    private float _initialTreeSwaySpeed;
+    private WindTextManager _windTextManager;
 
-    public double WindForce { get; set; }
+    public float WindForce { get; set; }
 
-    private GameObject _WindTarget;
+    public WindController()
+    {
+        _windTextManager = new WindTextManager();
 
-    private Material _TreeBranches;
+        _initialTreeSwaySpeed = 3f;
 
-    private GameObject[] Trees;
+        _windTarget = GameObject.Find("Wind Target");
 
-    private float InitialTreeSwaySpeed;
+        SetInitialTreeSwaySpeed();
+    }
 
-    public WindController() {
+    public void Update()
+    {
+        UpdateWindForce();
 
-        InitialTreeSwaySpeed = 3f;
+        _windTextManager.Update(WindForce);
 
-        Trees = GameObject.FindGameObjectsWithTag("Tree");
+        UpdateTreeForces();
 
-        _WindTarget = GameObject.Find("Wind Target");
+        UpdateRainForces();
+    }
 
-        foreach (var tree in Trees) {
+    private void SetInitialTreeSwaySpeed()
+    {
+        _trees = GameObject.FindGameObjectsWithTag("Tree");
+
+        foreach (var tree in _trees)
+        {
             var material = tree.GetComponentInChildren<MeshRenderer>().materials[1];
 
             material.SetFloat("_tree_sway_speed", 3f);
         }
     }
 
-    public void UpdateForces() {
-        UpdateTreeForces();
+    private void UpdateWindForce()
+    {
+        bool isBeingTracked = VuforiaTools.IsBeingTracked("Wind Target");
 
-        UpdateRainForces();
+        var windTargetTransform = _windTarget.GetComponentInChildren<Transform>();
+
+        if (windTargetTransform.localRotation.eulerAngles.y <= 280 && windTargetTransform.localRotation.eulerAngles.y >= 0 && isBeingTracked)
+        {
+            WindForce = windTargetTransform.localRotation.eulerAngles.y;
+        }
     }
 
-    private void UpdateTreeForces() {
-
-        foreach (var tree in Trees) {
+    private void UpdateTreeForces()
+    {
+        foreach (var tree in _trees)
+        {
 
             //módulo de forceOverTime das animações de folhas caindo
             var particleSystemForceOverTimeModule = tree.GetComponentInChildren<ParticleSystem>().forceOverLifetime;
 
             //adiciona força nas folhas
-            WindForce = Math.Round(_WindTarget.transform.eulerAngles.y);
-
-            if (WindForce > 0 && _WindTarget.transform.rotation.y < 0) {
+            if (WindForce > 0 && _windTarget.transform.rotation.y < 0)
+            {
                 WindForce = 0;
             }
 
-            particleSystemForceOverTimeModule.x = (int)WindForce / 10;
+            particleSystemForceOverTimeModule.z = (int)WindForce / 10;
 
             //balanço dos galhos das árvores
             var material = tree.GetComponentInChildren<MeshRenderer>().materials[1];
 
-            if (WindForce > InitialTreeSwaySpeed && (WindForce % 10 == 0) && WindForce != 0) {
+            if (WindForce > _initialTreeSwaySpeed && (WindForce % 10 == 0) && WindForce != 0)
+            {
                 material.SetFloat("_tree_sway_speed", (int)WindForce / 10);
             }
         }
     }
 
-    private void UpdateRainForces() {
-
+    private void UpdateRainForces()
+    {
+        // TO DO
     }
 }

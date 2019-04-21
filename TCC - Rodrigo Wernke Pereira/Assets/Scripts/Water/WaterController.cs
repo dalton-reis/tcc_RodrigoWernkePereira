@@ -22,7 +22,7 @@ public class WaterController {
         _waterEvaporationPosition.y -= 0.13f;
     }
 
-    public void UpdateWater(float temperature, bool raining, bool cloudsCorrectPosition) {
+    public void Update(float temperature, bool raining, bool cloudsCorrectPosition) {
         Evaporate(temperature, raining, cloudsCorrectPosition);
         Condense(temperature, raining,cloudsCorrectPosition);
     }
@@ -35,11 +35,7 @@ public class WaterController {
 
     private void Condense(float temperature, bool raining, bool cloudsCorrectPosition) {
 
-        var debuggerTextGO = GameObject.FindGameObjectWithTag("DebuggerText");
-
-        var textPro = debuggerTextGO.GetComponent<TextMeshPro>();
-
-        textPro.text = "raining: " + raining + " clouds Correct Pos: " + cloudsCorrectPosition;
+        VuforiaTools.AddTextToDebugger("Raining: " + raining + "\nClouds: " + cloudsCorrectPosition);
 
         if (temperature < 80 && (raining && cloudsCorrectPosition)) {
             _water.transform.localPosition = Vector3.MoveTowards(_water.transform.localPosition, _waterNormalPosition, condensationSpeed);
