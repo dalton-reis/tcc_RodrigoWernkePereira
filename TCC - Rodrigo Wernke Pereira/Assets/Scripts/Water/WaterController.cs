@@ -19,7 +19,7 @@ public class WaterController {
 
         _waterEvaporationPosition = _water.transform.localPosition;
 
-        _waterEvaporationPosition.y -= 0.13f;
+        _waterEvaporationPosition.y -= 0.05f;
     }
 
     public void Update(float temperature, bool raining, bool cloudsCorrectPosition) {

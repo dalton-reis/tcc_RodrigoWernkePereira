@@ -60,7 +60,6 @@ public class WindController
     {
         foreach (var tree in _trees)
         {
-
             //módulo de forceOverTime das animações de folhas caindo
             var particleSystemForceOverTimeModule = tree.GetComponentInChildren<ParticleSystem>().forceOverLifetime;
 

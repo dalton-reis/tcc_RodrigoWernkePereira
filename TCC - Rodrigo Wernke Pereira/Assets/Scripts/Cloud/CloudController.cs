@@ -4,7 +4,7 @@ public class CloudController
 {
     private GameObject _clouds;
 
-    private float movementSpeed = 0.05f * Time.deltaTime;
+    private float movementSpeed = 0.8f * Time.deltaTime;
 
     private Vector3 _cloudFinalPosition;
 
