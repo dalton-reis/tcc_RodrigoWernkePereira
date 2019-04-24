@@ -38,7 +38,6 @@ public class SimulationController : MonoBehaviour
         _cloudController.Update(_windController.WindForce, _temperatureController.Temperature);
         _rainController.Update(_cloudController.CorrectPosition);
         _waterController.Update(_temperatureController.Temperature, _rainController.Raining, _cloudController.CorrectPosition);
-        //_treeGrowthStateManager.Update();
 
         RestartScene(_temperatureController.Temperature);
     }
