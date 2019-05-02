@@ -11,14 +11,4 @@ public static class VuforiaTools {
 
         return status == TrackableBehaviour.Status.TRACKED;
     }
-
-    public static void AddTextToDebugger(string text) {
-        var debuggerTextGO = GameObject.FindGameObjectWithTag("DebuggerText");
-
-        if (debuggerTextGO) {
-            var textPro = debuggerTextGO.GetComponent<TextMeshPro>();
-
-            textPro.text = text;
-        }
-    }
 }
