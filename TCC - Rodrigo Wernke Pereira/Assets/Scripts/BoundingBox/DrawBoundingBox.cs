@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class DrawBoundingBox : MonoBehaviour
 {
     public Material material;
+    public GameObject HelpButton;
 
     private Vector3[] _terrainVertices;
     private Vector3[] _windKnobVertices;
@@ -12,12 +14,19 @@ public class DrawBoundingBox : MonoBehaviour
     private GameObject _windKnob;
     private GameObject _temperatureKnob;
 
+    public GameObject WindButton;
+    public GameObject TemperatureVirtualButton;
+    public GameObject SceneButton;
+
     private bool _isBeingTrackedWindTarget;
     private bool _isBeingTrackedSceneTarget;
     private bool _isBeingTrackedTemperatureTarget;
+    private bool _showBoundingBox;
 
     private void Start()
     {
+        _showBoundingBox = false;
+
         _isBeingTrackedWindTarget = VuforiaTools.IsBeingTracked("Wind Target");
         _isBeingTrackedSceneTarget = VuforiaTools.IsBeingTracked("Scene Target");
         _isBeingTrackedTemperatureTarget = VuforiaTools.IsBeingTracked("Temperature Target");
@@ -25,6 +34,10 @@ public class DrawBoundingBox : MonoBehaviour
         _terrain = GameObject.Find("Terrain");
         _windKnob = GameObject.Find("Wind Knob");
         _temperatureKnob = GameObject.Find("Temperature Knob");
+
+        var button = HelpButton.GetComponent<Button>();
+
+        button.onClick.AddListener(HelpButtonClicked);
     }
 
     private void Update()
@@ -36,9 +49,12 @@ public class DrawBoundingBox : MonoBehaviour
 
     private void OnPostRender()
     {
-        DrawSceneTargetBoundingBox();
-        DrawWindTargetBoundingBox();
-        DrawTemperatureTargetBoundingBox();
+        if (_showBoundingBox)
+        {
+            DrawSceneTargetBoundingBox();
+            DrawWindTargetBoundingBox();
+            DrawTemperatureTargetBoundingBox();
+        }
     }
 
     void DrawSceneTargetBoundingBox()
@@ -173,5 +189,10 @@ public class DrawBoundingBox : MonoBehaviour
             GL.End();
             GL.PopMatrix();
         }
+    }
+
+    public void HelpButtonClicked()
+    {
+        _showBoundingBox = true;
     }
 }
