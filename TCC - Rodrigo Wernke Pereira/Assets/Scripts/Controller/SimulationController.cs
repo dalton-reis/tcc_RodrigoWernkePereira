@@ -53,14 +53,14 @@ public class SimulationController : MonoBehaviour
     {
         if (temperature > 250 && !_sceneRestarted)
         {
-            RestartSceneEffects(temperature);
+            RestartSceneEffects();
             StartCoroutine(RestartSceneAfterSeconds());
 
             _sceneRestarted = true;
         }
     }
 
-    void RestartSceneEffects(float temperature)
+    void RestartSceneEffects()
     {
         var word = GameObject.FindGameObjectWithTag("Scene Target");
 

@@ -14,10 +14,6 @@ public class DrawBoundingBox : MonoBehaviour
     private GameObject _windKnob;
     private GameObject _temperatureKnob;
 
-    public GameObject WindButton;
-    public GameObject TemperatureVirtualButton;
-    public GameObject SceneButton;
-
     private bool _isBeingTrackedWindTarget;
     private bool _isBeingTrackedSceneTarget;
     private bool _isBeingTrackedTemperatureTarget;
