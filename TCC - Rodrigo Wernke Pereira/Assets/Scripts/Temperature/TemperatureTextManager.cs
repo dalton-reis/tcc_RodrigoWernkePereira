@@ -24,8 +24,11 @@ public class TemperatureTextManager
 
     public void Update(float temperature)
     {
-        _targetText.text = $"{Mathf.Round(temperature)} °C";
-
         _panelText.text = $"{Mathf.Round(temperature)} °C";
+    }
+
+    public void UpdateTargetText(float temperature)
+    {
+        _targetText.text = $"{Mathf.Round(temperature)} °C";
     }
 }

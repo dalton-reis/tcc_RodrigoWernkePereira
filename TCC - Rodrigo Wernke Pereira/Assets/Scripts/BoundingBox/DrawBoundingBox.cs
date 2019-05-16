@@ -189,6 +189,6 @@ public class DrawBoundingBox : MonoBehaviour
 
     public void HelpButtonClicked()
     {
-        _showBoundingBox = true;
+        _showBoundingBox = !_showBoundingBox;
     }
 }

@@ -5,6 +5,7 @@ public class Tree : MonoBehaviour
 {
     [SerializeField]
     public int InitialLife;
+
     [SerializeField]
     public TreeGrowthState TreeGrowthState;
 
@@ -43,8 +44,10 @@ public class Tree : MonoBehaviour
             case TreeGrowthState.Seed:
                 {
                     #region Scaling 
+
                     var destinationScale = new Vector3(0.1f, 0.1f, 0.1f);
                     StartCoroutine(ScaleOverTime(1f, destinationScale));
+
                     #endregion
 
                     #region Update Particle Leaves

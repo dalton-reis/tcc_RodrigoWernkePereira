@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class DayNightCycle : MonoBehaviour {
 
+    public bool IsNight { get; private set; }
+    public bool IsDay { get; private set; }
     public float DayLengthInSeconds;
-
     public GameObject DayTimeGameObject;
+    public int TimeOfDay;
 
     private float _rotationAngle = 0;
-
     private double _rotationPercentage = 0;
-
     private int day = 0;
 
     private void Update() {
@@ -45,9 +45,21 @@ public class DayNightCycle : MonoBehaviour {
                
         int min = (int)((decimalTime - Math.Truncate(decimalTime)) * 60);
 
-        //Debug.Log("Day: " + day + ". " + hour + ":" + min);
-
         DayTimeGameObject.GetComponent<TextMeshProUGUI>().text = "Day: " + day + ". " + hour + ":" + min;
+
+        TimeOfDay = hour;
+
+        if (TimeOfDay > 18 || TimeOfDay < 6)
+        {
+            IsNight = true;
+            IsDay = false;
+        }
+        else
+        {
+            IsNight = false;
+            IsDay = true;
+        }
+
     }
 
     private float DegreeInSeconds(float seconds) {

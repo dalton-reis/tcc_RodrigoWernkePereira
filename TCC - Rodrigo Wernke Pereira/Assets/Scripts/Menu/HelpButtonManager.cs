@@ -5,10 +5,11 @@ using Vuforia;
 public class HelpButtonManager : MonoBehaviour
 {
     public Button HelpTextButton;
-
     public GameObject WindTargetVirtualButtonGameObject;
     public GameObject TemperatureTargetVirtualButtonGameObject;
     public GameObject SceneTargetVirtualButtonGameObject;
+
+    private bool _virtualButtonsEnabled;
 
     void Start()
     {
@@ -17,12 +18,24 @@ public class HelpButtonManager : MonoBehaviour
         SceneTargetVirtualButtonGameObject.GetComponent<VirtualButtonBehaviour>().enabled = false;
         WindTargetVirtualButtonGameObject.GetComponent<VirtualButtonBehaviour>().enabled = false;
         TemperatureTargetVirtualButtonGameObject.GetComponent<VirtualButtonBehaviour>().enabled = false;
+        _virtualButtonsEnabled = false;
     }
 
-    public void ActivateVirtualButtons()
+    public void ToggleVirtualButtons()
     {
-        SceneTargetVirtualButtonGameObject.GetComponent<VirtualButtonBehaviour>().enabled = true;
-        WindTargetVirtualButtonGameObject.GetComponent<VirtualButtonBehaviour>().enabled = true;
-        TemperatureTargetVirtualButtonGameObject.GetComponent<VirtualButtonBehaviour>().enabled = true;
+        SceneTargetVirtualButtonGameObject.GetComponent<VirtualButtonBehaviour>().enabled = (!SceneTargetVirtualButtonGameObject.GetComponent<VirtualButtonBehaviour>().enabled);
+        WindTargetVirtualButtonGameObject.GetComponent<VirtualButtonBehaviour>().enabled = (!WindTargetVirtualButtonGameObject.GetComponent<VirtualButtonBehaviour>().enabled);
+        TemperatureTargetVirtualButtonGameObject.GetComponent<VirtualButtonBehaviour>().enabled = (!TemperatureTargetVirtualButtonGameObject.GetComponent<VirtualButtonBehaviour>().enabled);
+
+        if (!_virtualButtonsEnabled)
+        {
+            HelpTextButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            HelpTextButton.gameObject.SetActive(false);
+        }
+
+        _virtualButtonsEnabled = !_virtualButtonsEnabled;
     }
 }
