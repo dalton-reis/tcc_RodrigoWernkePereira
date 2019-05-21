@@ -9,9 +9,11 @@ public class TemperatureController
 
     private Func<IEnumerator, Coroutine> _startCoroutine;
     private GameObject _temperatureTarget;
+    private Transform _temperatureTargeTransform;
     private TemperatureTextManager _temperatureTextManager;
     private DayNightCycle DayNightCycle;
     private WaitForSeconds _waitForSeconds;
+
     private float _lastTempFromTarget;
 
     public TemperatureController(Func<IEnumerator, Coroutine> StartCoroutine)
@@ -20,6 +22,7 @@ public class TemperatureController
 
         _startCoroutine = StartCoroutine;
         _temperatureTarget = GameObject.FindGameObjectWithTag("Temperature Target");
+        _temperatureTargeTransform = _temperatureTarget.transform;
         _temperatureTextManager = new TemperatureTextManager();
         _waitForSeconds = new WaitForSeconds(1f);
         _lastTempFromTarget = 0f;
@@ -30,30 +33,39 @@ public class TemperatureController
     public void Update()
     {
         UpdateTemperature();
-
-        _temperatureTextManager.Update(Temperature);
+        UpdatePanelText();
     }
 
     private void UpdateTemperature()
     {
         bool isBeingTracked = VuforiaTools.IsBeingTracked("Temperature Target");
 
-        var temperatureTargetTransform = _temperatureTarget.GetComponentInChildren<Transform>();
-
-        var targetAngle = temperatureTargetTransform.localRotation.eulerAngles.y;
-
         if (isBeingTracked)
         {
-            if (_lastTempFromTarget != Map(targetAngle, 0, 350, 0, 51)
-                && temperatureTargetTransform.localRotation.eulerAngles.y < 350)
+            var targetAngle = _temperatureTargeTransform.localRotation.eulerAngles.y;
+
+            var mappedAngle = Map(targetAngle, 0, 280, 0, 50);
+
+            if (_lastTempFromTarget != mappedAngle
+                && _temperatureTargeTransform.localRotation.eulerAngles.y < 280)
             {
-                Temperature = Map(targetAngle, 0, 360, 0, 51);
+                Temperature = mappedAngle;
+
                 TargetTemperature = Temperature;
 
                 _lastTempFromTarget = Temperature;
 
-                _temperatureTextManager.UpdateTargetText(Temperature);
+                _temperatureTextManager.UpdateTargetText(TargetTemperature);
+                _temperatureTextManager.UpdatePanelText(Temperature);
             }
+        }
+    }
+
+    private void UpdatePanelText()
+    {
+        if (Temperature != TargetTemperature)
+        {
+            _temperatureTextManager.UpdatePanelText(Temperature);
         }
     }
 

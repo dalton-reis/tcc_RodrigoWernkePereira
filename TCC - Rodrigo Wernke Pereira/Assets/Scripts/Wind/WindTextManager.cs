@@ -23,10 +23,13 @@ public class WindTextManager
         _panelText = _windPanelText.GetComponent<TextMeshProUGUI>();
     }
 
-    public void Update(float windForce)
+    public void UpdatePanelText(float windForce)
     {
         _panelText.text = $"{Math.Round(windForce).ToString()} km/h";
+    }
 
-        _targetText.text = $"{Math.Round(windForce).ToString()} km/h";
+    public void UpdateTargetText(float windForce)
+    {
+        _targetText.text = $"{Mathf.Round(windForce)} km/h";
     }
 }

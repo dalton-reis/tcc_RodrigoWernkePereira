@@ -12,24 +12,27 @@ public class CloudController
 
     public bool ActiveClouds { get; set; }
 
-    public CloudController() {
+    public CloudController()
+    {
         _clouds = GameObject.FindGameObjectWithTag("Clouds");
 
-        _cloudFinalPosition = _clouds.transform.localPosition;
-
         _cloudFinalPosition = Vector3.zero;
+
+        ActiveClouds = false;
     }
 
-    public void Update(float windForce, float temperature) {
-        if (temperature >= 20) {
+    public void Update(float windForce, float temperature)
+    {
+        if (temperature >= 20 && !_clouds.activeSelf)
+        {
             _clouds.SetActive(true);
             ActiveClouds = true;
         }
 
-        if (windForce > 30f && ActiveClouds) {
+        if (windForce > 20f && ActiveClouds)
+        {
             _clouds.transform.localPosition = Vector3.MoveTowards(_clouds.transform.localPosition, _cloudFinalPosition, movementSpeed);
         }
-
 
         CorrectPosition = _clouds.transform.localPosition.Equals(_cloudFinalPosition) ? true : false;
     }

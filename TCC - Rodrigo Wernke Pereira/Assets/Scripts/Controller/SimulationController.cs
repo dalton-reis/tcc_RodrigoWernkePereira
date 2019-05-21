@@ -50,11 +50,11 @@ public class SimulationController : MonoBehaviour
 
     void UpdateSceneState()
     {
-        if (_temperatureController.Temperature < 10 || _temperatureController.Temperature >= 40)
+        if (_temperatureController.Temperature <= 10 || _temperatureController.Temperature >= 40)
         {
             _currentSceneState = SceneState.Unfavorable;
         }
-        else if (_temperatureController.Temperature >= 20 && _temperatureController.Temperature <= 30)
+        else if (_temperatureController.Temperature > 10 && _temperatureController.Temperature < 40)
         {
             _currentSceneState = SceneState.Favorable;
         }

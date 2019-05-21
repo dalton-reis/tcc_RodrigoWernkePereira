@@ -9,8 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: LPWaterHighQuality
   m_Shader: {fileID: 4800000, guid: 8165be4dd0b12774d80426d906df9c38, type: 3}
-  m_ShaderKeywords: WATER_REFLECTIVE _EMISSION _LIGHTABS_ON _SHADING_PIXELLIT _WAVES_OFF
-    _ZWRITE_ON
+  m_ShaderKeywords: _EMISSION _LIGHTABS_ON _SHADING_PIXELLIT _WAVES_OFF _ZWRITE_ON
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -64,7 +63,7 @@ Material:
     - _Length: 3
     - _LightAbs: 1
     - _NormalOffset: 0.46
-    - _Opacity: 0.3
+    - _Opacity: 0.907
     - _PointLights: 0
     - _RHeight: 0.25
     - _RHeight_: 0.025
@@ -89,7 +88,7 @@ Material:
     - _Waves: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.14818443, g: 0.6981132, b: 0.5615067, a: 1}
+    - _Color: {r: 0.06341223, g: 0.5524282, b: 0.7075472, a: 1}
     - _DeepColor: {r: 0.80718225, g: 0.8927291, b: 0.9150943, a: 1}
     - _Direction_: {r: -0.78801084, g: -0.6156614, b: -0.21985504, a: -0.17176953}
     - _FresColor: {r: 0.37486652, g: 0.6031506, b: 0.6792453, a: 1}

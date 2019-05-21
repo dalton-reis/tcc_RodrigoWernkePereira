@@ -22,7 +22,7 @@ public class TemperatureTextManager
         _panelText = _temperaturePanelText.GetComponent<TextMeshProUGUI>();
     }
 
-    public void Update(float temperature)
+    public void UpdatePanelText(float temperature)
     {
         _panelText.text = $"{Mathf.Round(temperature)} °C";
     }

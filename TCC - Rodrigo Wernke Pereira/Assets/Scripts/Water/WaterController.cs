@@ -14,13 +14,13 @@ public class WaterController {
     }
 
     void Evaporate(float temperature, bool raining, bool cloudsCorrectPosition) {
-        if (temperature > 100f && (!raining || !cloudsCorrectPosition)) {
+        if (temperature > 40f && (!raining || !cloudsCorrectPosition)) {
             _water.GetComponent<Water>().Evaporate();
         }
     }
 
     void Condense(float temperature, bool raining, bool cloudsCorrectPosition) {
-        if (temperature < 80 && (raining && cloudsCorrectPosition)) {
+        if (temperature < 40f && (raining && cloudsCorrectPosition)) {
             _water.GetComponent<Water>().Condense();
         }
     }

@@ -12,7 +12,7 @@ public class SceneManager : MonoBehaviour
     void ResetSceneIfShaken() {
         _acceleration = Input.acceleration;
 
-        if (_acceleration.sqrMagnitude > 10f) {
+        if (_acceleration.sqrMagnitude > 5f) {
             UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         }
     }
