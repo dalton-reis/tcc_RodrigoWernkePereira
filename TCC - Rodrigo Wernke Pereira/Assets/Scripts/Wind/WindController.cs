@@ -78,7 +78,7 @@ public class WindController
 
             var mappedAngle = Map(targetAngle, 0, 280, 0, 50);
 
-            if (_lastWindForceFromTarget != mappedAngle 
+            if (_lastWindForceFromTarget != mappedAngle
                 && _windTargetTransform.localRotation.eulerAngles.y <= 280)
             {
                 WindForce = mappedAngle;
@@ -98,12 +98,6 @@ public class WindController
             {
                 //módulo de forceOverTime das animações de folhas caindo
                 var particleSystemForceOverTimeModule = tree.GetComponentInChildren<ParticleSystem>().forceOverLifetime;
-
-                //adiciona força nas folhas
-                if (WindForce > 0 && _windTarget.transform.rotation.y < 0)
-                {
-                    WindForce = 0;
-                }
 
                 particleSystemForceOverTimeModule.z = (int)WindForce / 10;
 
@@ -126,7 +120,7 @@ public class WindController
             {
                 var forceOverLifeTimeModule = rainParticleSystem.forceOverLifetime;
 
-                forceOverLifeTimeModule.x = _lastWindForceFromTarget * 0.1f;
+                forceOverLifeTimeModule.x = WindForce * 0.1f;
             }
         }
     }
@@ -137,7 +131,7 @@ public class WindController
         {
             var forceOverLifeTimeModule = _snowParticleSystem.forceOverLifetime;
 
-            forceOverLifeTimeModule.x = _lastWindForceFromTarget * 0.001f;
+            forceOverLifeTimeModule.x = WindForce * 0.001f;
         }
     }
 

@@ -8,23 +8,28 @@ public class DayNightCycle : MonoBehaviour
     public bool IsNight { get; private set; }
     public bool IsDay { get; private set; }
     public float DayLengthInSeconds;
-    public GameObject DayTimeGameObject;
+
+    public GameObject DayInputPanel;
+    public GameObject TimeInputPanel;
 
     private float _rotationAngle;
     private double _rotationPercentage;
-    public int TimeOfDay;
-    private int day;
+    private int _timeOfDay;
+    private int _day;
+    private int _hour;
+    private int _minute;
 
     private void Start()
     {
         _rotationAngle = 0;
         _rotationPercentage = 0;
-        day = 1;
+        _day = 1;
+        _hour = 0;
+        _minute = 0;
     }
 
     private void Update()
     {
-
         float angle = transform.eulerAngles.z;
 
         transform.Rotate(0, 0, DegreeInSeconds(DayLengthInSeconds) * Time.deltaTime);
@@ -36,10 +41,11 @@ public class DayNightCycle : MonoBehaviour
         if (_rotationAngle < -360)
         {
             _rotationAngle = 0;
-            day++;
+            _day++;
         }
 
         TimeOfTheDay();
+        UpdateTextDisplays();
     }
 
     private double ConvertRange(int originalStart, int originalEnd, int newStart, int newEnd, double value)
@@ -53,15 +59,13 @@ public class DayNightCycle : MonoBehaviour
 
         double decimalTime = ConvertRange(0, 1, 0, 24, _rotationPercentage);
 
-        int hour = (int)(decimalTime);
+        _hour = (int)(decimalTime);
 
-        int min = (int)((decimalTime - Math.Truncate(decimalTime)) * 60);
+        _minute = (int)((decimalTime - Math.Truncate(decimalTime)) * 60);
 
-        DayTimeGameObject.GetComponent<TextMeshProUGUI>().text = "Day: " + day + ". " + hour + ":" + min;
+        _timeOfDay = _hour;
 
-        TimeOfDay = hour;
-
-        if (TimeOfDay > 18 || TimeOfDay < 6)
+        if (_timeOfDay > 18 || _timeOfDay < 6)
         {
             IsNight = true;
             IsDay = false;
@@ -71,11 +75,16 @@ public class DayNightCycle : MonoBehaviour
             IsNight = false;
             IsDay = true;
         }
-
     }
 
     private float DegreeInSeconds(float seconds)
     {
         return -360 / seconds;
+    }
+
+    private void UpdateTextDisplays()
+    {
+        DayInputPanel.GetComponent<TextMeshProUGUI>().text = $"{_day}";
+        TimeInputPanel.GetComponent<TextMeshProUGUI>().text = $"{_hour}:{_minute}";
     }
 }

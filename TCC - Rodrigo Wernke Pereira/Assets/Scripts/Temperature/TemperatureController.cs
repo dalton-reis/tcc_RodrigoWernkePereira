@@ -18,12 +18,14 @@ public class TemperatureController
 
     public TemperatureController(Func<IEnumerator, Coroutine> StartCoroutine)
     {
+        _temperatureTextManager = new TemperatureTextManager();
+        _temperatureTextManager.UpdatePanelText(0f);
+
         DayNightCycle = GameObject.Find("Sun And Moon Rotator").GetComponent<DayNightCycle>();
 
         _startCoroutine = StartCoroutine;
         _temperatureTarget = GameObject.FindGameObjectWithTag("Temperature Target");
         _temperatureTargeTransform = _temperatureTarget.transform;
-        _temperatureTextManager = new TemperatureTextManager();
         _waitForSeconds = new WaitForSeconds(1f);
         _lastTempFromTarget = 0f;
 

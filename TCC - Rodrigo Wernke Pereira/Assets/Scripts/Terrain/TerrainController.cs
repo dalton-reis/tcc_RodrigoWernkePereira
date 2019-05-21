@@ -14,6 +14,7 @@ public class TerrainController
     private float _lerpDurationTimeInSeconds;
     private float _lerpAmountPerUpdate;
     private bool _lerpingTerrain;
+    private WaitForEndOfFrame _waitForEndOfFrame;
 
     public TerrainController(Func<IEnumerator, Coroutine> startCoroutine)
     {
@@ -28,6 +29,7 @@ public class TerrainController
         _lerpAmountPerUpdate = 0f;
 
         _startCoroutine = startCoroutine;
+        _waitForEndOfFrame = new WaitForEndOfFrame();
     }
 
     public void Update(SceneState sceneState, float temperature)
@@ -75,7 +77,7 @@ public class TerrainController
                 }
             }
 
-            yield return new WaitForEndOfFrame();
+            yield return _waitForEndOfFrame;
         }
     }
 }

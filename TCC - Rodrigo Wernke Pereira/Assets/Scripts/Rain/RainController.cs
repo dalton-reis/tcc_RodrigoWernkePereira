@@ -24,7 +24,6 @@ public class RainController {
         _clouds.SetActive(false);
 
         Raining = false;
-
     }
 
     //se a cena tem nuvens, faz chover de tempo em tempo.

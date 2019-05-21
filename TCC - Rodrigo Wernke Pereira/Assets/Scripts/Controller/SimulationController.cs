@@ -21,7 +21,7 @@ public class SimulationController : MonoBehaviour
 
         _currentSceneState = SceneState.Unfavorable;
         _windController = new WindController();
-        _cloudController = new CloudController();
+        _cloudController = new CloudController(StartCoroutine);
         _rainController = new RainController();
         _temperatureController = new TemperatureController(StartCoroutine);
         _waterController = new WaterController();
