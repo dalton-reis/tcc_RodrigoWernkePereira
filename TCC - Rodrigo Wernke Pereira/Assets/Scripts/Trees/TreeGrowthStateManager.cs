@@ -6,6 +6,7 @@ using UnityEngine;
 public class TreeGrowthStateManager
 {
     private Func<IEnumerator, Coroutine> _startCoroutine;
+    private Action<GameObject> _updateTreeWindForce;
     private GameObject[] _trees;
     private List<GameObject> _activeTrees;
     private List<GameObject> _disabledTrees;
@@ -14,9 +15,10 @@ public class TreeGrowthStateManager
     private SceneState _sceneState;
     private System.Random _random;
 
-    public TreeGrowthStateManager(Func<IEnumerator, Coroutine> StartCoroutine)
+    public TreeGrowthStateManager(Func<IEnumerator, Coroutine> startCoroutine, Action<GameObject> updateTreeWindForce)
     {
-        _startCoroutine = StartCoroutine;
+        _startCoroutine = startCoroutine;
+        _updateTreeWindForce = updateTreeWindForce;
         _trees = GameObject.FindGameObjectsWithTag("Tree");
 
         _activeTrees = new List<GameObject>();
@@ -28,7 +30,6 @@ public class TreeGrowthStateManager
 
         RandomizeTrees();
         _startCoroutine.Invoke(GrowTrees());
-
     }
 
     public void Update(SceneState state)
@@ -46,7 +47,9 @@ public class TreeGrowthStateManager
             {
                 foreach (var tree in _activeTrees)
                 {
-                    tree.GetComponent<Tree>().UpdateGrowthState();
+                    var treeInstance = tree.GetComponent<Tree>();
+                    treeInstance.UpdateGrowthState();
+                    _updateTreeWindForce.Invoke(tree);
                 }
 
                 if (_disabledTrees.Count > 0)

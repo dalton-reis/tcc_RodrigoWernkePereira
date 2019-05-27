@@ -14,6 +14,7 @@ public class WindController
 
     private float _initialTreeSwaySpeed;
     private float _lastWindForceFromTarget;
+    private float _lastWindForceUpdate;
 
     public WindController()
     {
@@ -21,13 +22,13 @@ public class WindController
         _windTextManager.UpdatePanelText(0f);
 
         _initialTreeSwaySpeed = 3f;
-
         _windTarget = GameObject.Find("Wind Target");
         _windTargetTransform = _windTarget.transform;
         _snowParticleSystem = GameObject.Find("SnowParticleSystem").GetComponent<ParticleSystem>();
         _rainParticleSystems = GameObject.Find("Clouds").GetComponentsInChildren<ParticleSystem>();
 
         _lastWindForceFromTarget = 0f;
+        _lastWindForceUpdate = 0f;
 
         WindForce = 0;
 
@@ -40,11 +41,16 @@ public class WindController
 
         UpdateTextDisplays();
 
-        UpdateTreeForces();
+        if (WindForce != _lastWindForceUpdate)
+        {
+            _lastWindForceUpdate = WindForce;
 
-        UpdateRainForces();
+            UpdateTreesWindForce();
 
-        UpdateSnowForces();
+            UpdateRainForces();
+
+            UpdateSnowForces();
+        }
     }
 
     private void SetInitialTreeSwaySpeed()
@@ -90,23 +96,55 @@ public class WindController
         }
     }
 
-    private void UpdateTreeForces()
+    private void UpdateTreesWindForce()
     {
         foreach (var tree in _trees)
         {
-            if (tree.activeSelf && (tree.GetComponent<Tree>().TreeGrowthState == TreeGrowthState.Mature || tree.GetComponent<Tree>().TreeGrowthState == TreeGrowthState.Snag))
+            UpdateTreeWindForce(tree);
+        }
+    }
+
+    public void UpdateTreeWindForceOnGrow(GameObject tree)
+    {
+        TreeGrowthState treeGrowthState = tree.GetComponentInChildren<Tree>().TreeGrowthState;
+
+        if (treeGrowthState == TreeGrowthState.Mature || treeGrowthState == TreeGrowthState.Snag)
+        {
+            UpdateTreeWindForce(tree);
+        }
+    }
+
+    private void UpdateTreeWindForce(GameObject tree)
+    {
+        TreeGrowthState treeGrowthState = tree.GetComponentInChildren<Tree>().TreeGrowthState;
+
+        if (tree.activeSelf && (treeGrowthState == TreeGrowthState.Mature || treeGrowthState == TreeGrowthState.Snag))
+        {
+            //módulo de forceOverTime das animações de folhas caindo
+            var particleSystemForceOverTimeModule = tree.GetComponentInChildren<ParticleSystem>().forceOverLifetime;
+
+            float force = (int)_lastWindForceUpdate;
+
+            particleSystemForceOverTimeModule.x = force;
+
+            //balanço dos galhos das árvores
+            var material = tree.GetComponentInChildren<MeshRenderer>().materials[1];
+
+            if (force > _initialTreeSwaySpeed && (force > 3))
             {
-                //módulo de forceOverTime das animações de folhas caindo
-                var particleSystemForceOverTimeModule = tree.GetComponentInChildren<ParticleSystem>().forceOverLifetime;
+                force = (force / 10) + 3;
 
-                particleSystemForceOverTimeModule.z = (int)WindForce / 10;
-
-                //balanço dos galhos das árvores
-                var material = tree.GetComponentInChildren<MeshRenderer>().materials[1];
-
-                if (WindForce > _initialTreeSwaySpeed && (WindForce % 10 == 0) && WindForce != 0)
+                material.SetFloat("_tree_sway_speed", force);
+            }
+            else
+            {
+                if (force == 0)
                 {
-                    material.SetFloat("_tree_sway_speed", (int)WindForce / 10);
+                    material.SetFloat("_tree_sway_speed", 0.8f);
+                }
+                else
+                {
+                    material.SetFloat("_tree_sway_speed", force);
                 }
             }
         }
@@ -131,7 +169,7 @@ public class WindController
         {
             var forceOverLifeTimeModule = _snowParticleSystem.forceOverLifetime;
 
-            forceOverLifeTimeModule.x = WindForce * 0.001f;
+            forceOverLifeTimeModule.x = _lastWindForceUpdate * 0.001f;
         }
     }
 

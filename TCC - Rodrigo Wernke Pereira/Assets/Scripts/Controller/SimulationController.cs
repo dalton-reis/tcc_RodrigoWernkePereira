@@ -27,7 +27,7 @@ public class SimulationController : MonoBehaviour
         _waterController = new WaterController();
         _terrainController = new TerrainController(StartCoroutine);
         _snowController = new SnowController();
-        _treeGrowthStateManager = new TreeGrowthStateManager(StartCoroutine);
+        _treeGrowthStateManager = new TreeGrowthStateManager(StartCoroutine,_windController.UpdateTreeWindForceOnGrow);
 
         _sceneRestarted = false;
     }
@@ -40,8 +40,8 @@ public class SimulationController : MonoBehaviour
         _temperatureController.Update();
         _snowController.Update(_temperatureController.Temperature);
         _cloudController.Update(_windController.WindForce, _temperatureController.Temperature);
-        _rainController.Update(_cloudController.CorrectPosition);
-        _waterController.Update(_temperatureController.Temperature, _rainController.Raining, _cloudController.CorrectPosition);
+        _rainController.Update(_cloudController.IsOnRainingPosition);
+        _waterController.Update(_temperatureController.Temperature, _rainController.Raining, _cloudController.IsOnRainingPosition);
         _terrainController.Update(_currentSceneState, _temperatureController.Temperature);
         _treeGrowthStateManager.Update(_currentSceneState);
 

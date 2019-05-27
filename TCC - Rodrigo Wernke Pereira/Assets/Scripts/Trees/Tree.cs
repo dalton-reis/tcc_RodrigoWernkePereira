@@ -4,9 +4,6 @@ using UnityEngine;
 public class Tree : MonoBehaviour
 {
     [SerializeField]
-    public int InitialLife;
-
-    [SerializeField]
     public TreeGrowthState TreeGrowthState;
 
     private Transform _treeTransform;
