@@ -158,7 +158,7 @@ public class WindController
             {
                 var forceOverLifeTimeModule = rainParticleSystem.forceOverLifetime;
 
-                forceOverLifeTimeModule.x = WindForce * 0.1f;
+                forceOverLifeTimeModule.z = WindForce * 0.5f;
             }
         }
     }

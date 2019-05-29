@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class DayNightCycle : MonoBehaviour
 {
-
     public bool IsNight { get; private set; }
     public bool IsDay { get; private set; }
     public float DayLengthInSeconds;
@@ -14,7 +13,6 @@ public class DayNightCycle : MonoBehaviour
 
     private float _rotationAngle;
     private double _rotationPercentage;
-    private int _timeOfDay;
     private int _day;
     private int _hour;
     private int _minute;
@@ -30,8 +28,6 @@ public class DayNightCycle : MonoBehaviour
 
     private void Update()
     {
-        float angle = transform.eulerAngles.z;
-
         transform.Rotate(0, 0, DegreeInSeconds(DayLengthInSeconds) * Time.deltaTime);
 
         _rotationAngle += DegreeInSeconds(DayLengthInSeconds) * Time.deltaTime;
@@ -56,16 +52,13 @@ public class DayNightCycle : MonoBehaviour
 
     private void TimeOfTheDay()
     {
-
         double decimalTime = ConvertRange(0, 1, 0, 24, _rotationPercentage);
 
         _hour = (int)(decimalTime);
 
         _minute = (int)((decimalTime - Math.Truncate(decimalTime)) * 60);
 
-        _timeOfDay = _hour;
-
-        if (_timeOfDay > 18 || _timeOfDay < 6)
+        if ((_hour >= 18) || (_hour < 6))
         {
             IsNight = true;
             IsDay = false;
