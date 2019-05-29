@@ -14,12 +14,27 @@ public class Tree : MonoBehaviour
 
     private Material _dryLeafMaterial;
     private Material _windLeafMaterial;
+    private Material _transparentMaterial;
+    private Material _seedLogMaterial;
+    private Material _saplingLogMaterial;
+    private Material _sproutLogMaterial;
+    private Material _matureLogMaterial;
+    private Material _snagLogMaterial;
+    private Material _currentLogMaterial;
+    private Material _meshLogMaterial;
 
     private Color _dryLeafColor;
     private Color _windLeafColor;
 
+    private float _lerpDurationTimeInSeconds;
+    private float _scaleLerpDurationTimeInSeconds;
+    private float _lerpAmountPerUpdate;
+    private WaitForEndOfFrame _waitForEndOfFrame;
+
     void Start()
     {
+        _waitForEndOfFrame = new WaitForEndOfFrame();
+
         _treeTransform = GetComponent<Transform>();
         _meshRenderer = GetComponentInChildren<MeshRenderer>();
 
@@ -27,134 +42,202 @@ public class Tree : MonoBehaviour
 
         _dryLeafMaterial = Resources.Load("Materials/Tree/DryLeaf", typeof(Material)) as Material;
         _windLeafMaterial = Resources.Load("Materials/Tree/WindLeaves", typeof(Material)) as Material;
+        _transparentMaterial = Resources.Load("Materials/Tree/TransparentMaterial", typeof(Material)) as Material;
+        _seedLogMaterial = Resources.Load("Materials/Tree/SeedLogMaterial", typeof(Material)) as Material;
+        _saplingLogMaterial = Resources.Load("Materials/Tree/SaplingLogMaterial", typeof(Material)) as Material;
+        _sproutLogMaterial = Resources.Load("Materials/Tree/SproutLogMaterial", typeof(Material)) as Material;
+        _matureLogMaterial = Resources.Load("Materials/Tree/MatureLogMaterial", typeof(Material)) as Material;
+        _snagLogMaterial = Resources.Load("Materials/Tree/SnagLogMaterial", typeof(Material)) as Material;
+        _meshLogMaterial = _meshRenderer.materials[0];
+        _currentLogMaterial = _meshRenderer.materials[0];
 
         _dryLeafColor = new Color((185 / 255f), (122 / 255f), (87 / 255f));
         _windLeafColor = _leavesParticleSystem.main.startColor.color;
+
+        _lerpAmountPerUpdate = 0f;
+        _scaleLerpDurationTimeInSeconds = 3f;
+        _lerpDurationTimeInSeconds = _scaleLerpDurationTimeInSeconds / 2;
 
         SetGrowthState();
     }
 
     public void SetGrowthState()
     {
+        var leavesParticleSystem = GetComponentInChildren<ParticleSystem>();
+        
         switch (TreeGrowthState)
         {
             case TreeGrowthState.Seed:
                 {
+                    #region Update Particle Leaves
+
+                    _leavesParticleSystem.Clear();
+                    _leavesParticleSystem.Stop();
+
+                    #endregion
+
+                    #region Update Log Material
+
+                    StartCoroutine(ChangeLogMaterialOverTime(_seedLogMaterial));
+
+                    #endregion
+
+                    #region Update Leaf Material
+
+                    var materials = _meshRenderer.materials;
+
+                    materials[1] = _transparentMaterial;
+
+                    _meshRenderer.materials = materials;
+
+                    #endregion
+
                     #region Scaling 
 
                     var destinationScale = new Vector3(0.1f, 0.1f, 0.1f);
-                    StartCoroutine(ScaleOverTime(1f, destinationScale));
 
-                    #endregion
+                    StartCoroutine(ScaleOverTime(destinationScale));
 
-                    #region Update Particle Leaves
-                    if (_leavesParticleSystem.isPlaying)
-                    {
-                        _leavesParticleSystem.Stop();
-                    }
-                    #endregion
-
-                    #region Update Material
-                    var materials = _meshRenderer.materials;
-
-                    if (materials[1].name.Equals("DryLeaf (Instance)"))
-                    {
-                        materials[1] = _windLeafMaterial;
-
-                        _meshRenderer.materials = materials;
-                    }
                     #endregion
 
                     break;
                 }
             case TreeGrowthState.Sprout:
                 {
+                    #region Update Particle Leaves
+
+                    _leavesParticleSystem.Clear();
+
+                    _leavesParticleSystem.Stop();
+
+                    #endregion
+                    
+                    #region Update Log Material
+
+                    StartCoroutine(ChangeLogMaterialOverTime(_sproutLogMaterial));
+
+                    #endregion
+
+                    #region Update Update Leaf Material
+
+                    var materials = _meshRenderer.materials;
+
+                    materials[1] = _transparentMaterial;
+
+                    _meshRenderer.materials = materials;
+
+                    #endregion
+
                     #region Scaling 
                     var destinationScale = new Vector3(0.4f, 0.4f, 0.4f);
 
-                    StartCoroutine(ScaleOverTime(1f, destinationScale));
-                    #endregion
-
-                    #region Update Particle Leaves
-                    if (_leavesParticleSystem.isPlaying)
-                    {
-                        _leavesParticleSystem.Stop();
-                    }
+                    StartCoroutine(ScaleOverTime(destinationScale));
                     #endregion
 
                     break;
                 }
             case TreeGrowthState.Sapling:
                 {
-                    #region Scaling 
-                    var destinationScale = new Vector3(0.6f, 0.6f, 0.6f);
-                    StartCoroutine(ScaleOverTime(1f, destinationScale));
+                    #region Update Particle Leaves
+
+                    _leavesParticleSystem.Clear();
+                    _leavesParticleSystem.Stop();
+
                     #endregion
 
-                    #region Update Particle Leaves
-                    var leavesParticleSystem = GetComponentInChildren<ParticleSystem>();
+                    #region Update Log Material
 
-                    if (leavesParticleSystem.isPlaying)
-                    {
-                        leavesParticleSystem.Stop();
-                    }
+                    StartCoroutine(ChangeLogMaterialOverTime(_saplingLogMaterial));
+
+                    #endregion
+
+                    #region Scaling 
+
+                    var destinationScale = new Vector3(0.6f, 0.6f, 0.6f);
+
+                    StartCoroutine(ScaleOverTime(destinationScale));
+
                     #endregion
 
                     break;
                 }
             case TreeGrowthState.Mature:
                 {
-                    #region Scaling 
-                    var destinationScale = new Vector3(1f, 1f, 1f);
-
-                    StartCoroutine(ScaleOverTime(1f, destinationScale));
-                    #endregion
-
                     #region Update Particle Leaves
 
                     var mainModule = _leavesParticleSystem.main;
+
                     mainModule.startColor = _windLeafColor;
 
-                    if (!_leavesParticleSystem.isPlaying)
-                    {
-                        _leavesParticleSystem.Play();
-                    }
+                    _leavesParticleSystem.Clear();
 
+                    _leavesParticleSystem.Play();
+
+                    #endregion
+                    
+                    #region Update Log Material
+
+                    StartCoroutine(ChangeLogMaterialOverTime(_matureLogMaterial));
+
+                    #endregion
+
+                    #region Update Leaf Material
+
+                    var materials = _meshRenderer.materials;
+
+                    materials[1] = _windLeafMaterial;
+
+                    _meshRenderer.materials = materials;
+
+                    #endregion
+
+                    #region Scaling 
+                    var destinationScale = new Vector3(1f, 1f, 1f);
+
+                    StartCoroutine(ScaleOverTime(destinationScale));
                     #endregion
 
                     break;
                 }
             case TreeGrowthState.Snag:
                 {
-                    #region Update Material
+                    #region Update Particle Leaves
+
+                    _leavesParticleSystem.Clear();
+                    _leavesParticleSystem.Play();
+
+                    var mainModule = _leavesParticleSystem.main;
+
+                    mainModule.startColor = _dryLeafColor;
+
+                    #endregion
+
+                    #region Update Log Material
+
+                    StartCoroutine(ChangeLogMaterialOverTime(_snagLogMaterial));
+
+                    #endregion
+
+                    #region Update Update Leaf Material
 
                     var materials = _meshRenderer.materials;
 
                     materials[1] = _dryLeafMaterial;
 
                     _meshRenderer.materials = materials;
-                    #endregion
 
-                    #region Update Particle Leaves
-                    if (!_leavesParticleSystem.isPlaying)
-                    {
-                        _leavesParticleSystem.Play();
-                    }
-
-                    var mainModule = _leavesParticleSystem.main;
-
-                    mainModule.startColor = _dryLeafColor;
                     #endregion
 
                     #region Scaling 
+
                     var destinationScale = new Vector3(1.1f, 1.1f, 1.1f);
-                    StartCoroutine(ScaleOverTime(1f, destinationScale));
+
+                    StartCoroutine(ScaleOverTime(destinationScale));
+
                     #endregion
 
                     break;
                 }
-            default:
-                return;
         }
     }
 
@@ -170,26 +253,23 @@ public class Tree : MonoBehaviour
         {
             case TreeGrowthState.Seed:
                 TreeGrowthState = TreeGrowthState.Sprout;
-                return;
+                break;
             case TreeGrowthState.Sprout:
                 TreeGrowthState = TreeGrowthState.Sapling;
-                return;
+                break;
             case TreeGrowthState.Sapling:
                 TreeGrowthState = TreeGrowthState.Mature;
-                return;
+                break;
             case TreeGrowthState.Mature:
                 TreeGrowthState = TreeGrowthState.Snag;
-                return;
+                break;
             case TreeGrowthState.Snag:
                 TreeGrowthState = TreeGrowthState.Seed;
-                return;
-            default:
-                TreeGrowthState = TreeGrowthState.Seed;
-                return;
+                break;
         }
     }
 
-    IEnumerator ScaleOverTime(float time, Vector3 destinationScale)
+    IEnumerator ScaleOverTime(Vector3 destinationScale)
     {
         Vector3 originalScale = _treeTransform.localScale;
 
@@ -197,9 +277,40 @@ public class Tree : MonoBehaviour
 
         do
         {
-            _treeTransform.localScale = Vector3.Lerp(originalScale, destinationScale, currentTime / time);
+            _treeTransform.localScale = Vector3.Lerp(originalScale, destinationScale, currentTime / _lerpDurationTimeInSeconds);
+
             currentTime += Time.deltaTime;
+
             yield return null;
-        } while (currentTime <= time);
+
+        } while (currentTime <= _lerpDurationTimeInSeconds);
+    }
+
+    IEnumerator ChangeLogMaterialOverTime(Material transitionToMaterial)
+    {
+        while (_currentLogMaterial != transitionToMaterial)
+        {
+            _meshLogMaterial.color = Color.Lerp(_currentLogMaterial.color, transitionToMaterial.color, _lerpAmountPerUpdate);
+
+            if (_lerpAmountPerUpdate < 1)
+            {
+                _lerpAmountPerUpdate += Time.deltaTime / _lerpDurationTimeInSeconds;
+
+                if (_lerpAmountPerUpdate > 1)
+                {
+                    _currentLogMaterial = transitionToMaterial;
+
+                    var materials = _meshRenderer.materials;
+
+                    _meshRenderer.materials[0] = _currentLogMaterial;
+
+                    _meshRenderer.materials = materials;
+
+                    _lerpAmountPerUpdate = 0;
+                }
+            }
+
+            yield return _waitForEndOfFrame;
+        }
     }
 }
