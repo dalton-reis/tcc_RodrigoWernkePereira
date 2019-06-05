@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class CloudController
 {
-    public bool ActiveClouds { get; set; }
+    public bool IsActive { get; set; }
     public bool IsOnRainingPosition { get; set; }
     public bool IsOnDefaultPosition { get; set; }
+    public bool IsMoving { get; set; }
 
     private GameObject _clouds;
     private Func<IEnumerator, Coroutine> _startCoroutine;
     private float _movementSpeed;
     private Vector3 _cloudRainingPosition;
     private Vector3 _cloudsDefaultPosition;
-    private bool _movingClouds;
     private WaitForEndOfFrame _waitForEndOfFrame;
 
     public CloudController(Func<IEnumerator, Coroutine> StartCoroutine)
@@ -28,9 +28,10 @@ public class CloudController
         _cloudRainingPosition = Vector3.zero;
         _cloudsDefaultPosition = _clouds.transform.localPosition;
 
-        ActiveClouds = false;
+        IsActive = false;
         IsOnDefaultPosition = true;
         IsOnRainingPosition = false;
+        IsMoving = false;
     }
 
     public void Update(float windForce, float temperature)
@@ -49,7 +50,7 @@ public class CloudController
 
     void MoveToDefaultPosition(float windForce)
     {
-        if (windForce < 20f && (ActiveClouds && IsOnRainingPosition && !_movingClouds))
+        if (windForce < 20f && (IsActive && IsOnRainingPosition && !IsMoving))
         {
             _startCoroutine(MoveToDefaultPosition());
         }
@@ -57,7 +58,7 @@ public class CloudController
 
     void UpdateCloudsPosition(float windForce)
     {
-        if (ActiveClouds && !_movingClouds)
+        if (IsActive && !IsMoving)
         {
             MoveToRainingPosition(windForce);
             MoveToDefaultPosition(windForce);
@@ -68,7 +69,7 @@ public class CloudController
     {
         while (!IsOnDefaultPosition)
         {
-            _movingClouds = true;
+            IsMoving = true;
 
             float step = _movementSpeed * Time.deltaTime;
 
@@ -77,7 +78,7 @@ public class CloudController
 
             if (_clouds.transform.localPosition.Equals(_cloudsDefaultPosition))
             {
-                _movingClouds = false;
+                IsMoving = false;
                 IsOnDefaultPosition = true;
                 IsOnRainingPosition = false;
             }
@@ -90,7 +91,7 @@ public class CloudController
     {
         while (!IsOnRainingPosition)
         {
-            _movingClouds = true;
+            IsMoving = true;
 
             float step = _movementSpeed * Time.deltaTime;
 
@@ -99,7 +100,7 @@ public class CloudController
 
             if (_clouds.transform.localPosition.Equals(_cloudRainingPosition))
             {
-                _movingClouds = false;
+                IsMoving = false;
                 IsOnRainingPosition = true;
                 IsOnDefaultPosition = false;
             }
@@ -113,7 +114,7 @@ public class CloudController
         if (temperature >= 20 && !_clouds.activeSelf)
         {
             _clouds.SetActive(true);
-            ActiveClouds = true;
+            IsActive = true;
         }
     }
 }

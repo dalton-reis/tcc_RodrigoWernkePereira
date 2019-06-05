@@ -5,6 +5,9 @@ using Vuforia;
 public class HelpButtonManager : MonoBehaviour
 {
     public Button HelpTextButton;
+    public Button TemperatureTargetTextButton;
+    public Button WindTargetTextButton;
+    public Button SceneTargetTextButton;
     public GameObject WindTargetVirtualButtonGameObject;
     public GameObject TemperatureTargetVirtualButtonGameObject;
     public GameObject SceneTargetVirtualButtonGameObject;
@@ -34,6 +37,10 @@ public class HelpButtonManager : MonoBehaviour
         else
         {
             HelpTextButton.gameObject.SetActive(false);
+
+            TemperatureTargetTextButton.gameObject.SetActive(false);
+            WindTargetTextButton.gameObject.SetActive(false);
+            SceneTargetTextButton.gameObject.SetActive(false);
         }
 
         _virtualButtonsEnabled = !_virtualButtonsEnabled;

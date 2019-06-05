@@ -14,7 +14,6 @@ public class WindController
 
     private float _initialTreeSwaySpeed;
     private float _lastWindForceFromTarget;
-    private float _lastWindForceUpdate;
 
     public WindController()
     {
@@ -28,7 +27,6 @@ public class WindController
         _rainParticleSystems = GameObject.Find("Clouds").GetComponentsInChildren<ParticleSystem>();
 
         _lastWindForceFromTarget = 0f;
-        _lastWindForceUpdate = 0f;
 
         WindForce = 0;
 
@@ -41,16 +39,11 @@ public class WindController
 
         UpdateTextDisplays();
 
-        if (WindForce != _lastWindForceUpdate)
-        {
-            _lastWindForceUpdate = WindForce;
+        UpdateTreesWindForce();
 
-            UpdateTreesWindForce();
+        UpdateRainForces();
 
-            UpdateRainForces();
-
-            UpdateSnowForces();
-        }
+        UpdateSnowForces();
     }
 
     private void SetInitialTreeSwaySpeed()
@@ -123,30 +116,14 @@ public class WindController
             //módulo de forceOverTime das animações de folhas caindo
             var particleSystemForceOverTimeModule = tree.GetComponentInChildren<ParticleSystem>().forceOverLifetime;
 
-            float force = (int)_lastWindForceUpdate;
-
-            particleSystemForceOverTimeModule.x = force;
+            particleSystemForceOverTimeModule.x = WindForce;
+            particleSystemForceOverTimeModule.y = 0;
+            particleSystemForceOverTimeModule.z = 0;
 
             //balanço dos galhos das árvores
             var material = tree.GetComponentInChildren<MeshRenderer>().materials[1];
 
-            if (force > _initialTreeSwaySpeed && (force > 3))
-            {
-                force = (force / 10) + 3;
-
-                material.SetFloat("_tree_sway_speed", force);
-            }
-            else
-            {
-                if (force == 0)
-                {
-                    material.SetFloat("_tree_sway_speed", 0.8f);
-                }
-                else
-                {
-                    material.SetFloat("_tree_sway_speed", force);
-                }
-            }
+            material.SetFloat("_tree_sway_speed", WindForce * 0.3f);
         }
     }
 
@@ -169,7 +146,7 @@ public class WindController
         {
             var forceOverLifeTimeModule = _snowParticleSystem.forceOverLifetime;
 
-            forceOverLifeTimeModule.x = _lastWindForceUpdate * 0.001f;
+            forceOverLifeTimeModule.x = WindForce * 0.001f;
         }
     }
 
