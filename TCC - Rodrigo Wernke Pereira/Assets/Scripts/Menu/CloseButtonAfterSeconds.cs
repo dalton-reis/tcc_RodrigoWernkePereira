@@ -18,7 +18,7 @@ public class CloseButtonAfterSeconds : MonoBehaviour
         _windTargetButton = GameObject.Find("Wind Target Help Button");
         _temperatureTargetButton = GameObject.Find("Temperature Target Help Button");
 
-        _waitForSeconds = new WaitForSeconds(5f);
+        _waitForSeconds = new WaitForSeconds(8f);
         _firstEnableExecuted = false;
     }
 
