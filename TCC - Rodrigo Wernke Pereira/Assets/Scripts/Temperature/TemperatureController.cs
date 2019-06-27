@@ -11,7 +11,7 @@ public class TemperatureController
     private GameObject _temperatureTarget;
     private Transform _temperatureTargeTransform;
     private TemperatureTextManager _temperatureTextManager;
-    private DayNightCycle DayNightCycle;
+    private DayNightCycleController _dayNightCycleController;
     private WaitForSeconds _waitForSeconds;
 
     private float _lastTempFromTarget;
@@ -21,7 +21,7 @@ public class TemperatureController
         _temperatureTextManager = new TemperatureTextManager();
         _temperatureTextManager.UpdatePanelText(0f);
 
-        DayNightCycle = GameObject.Find("Sun And Moon Rotator").GetComponent<DayNightCycle>();
+        _dayNightCycleController = GameObject.Find("Sun And Moon Rotator").GetComponent<DayNightCycleController>();
 
         _startCoroutine = StartCoroutine;
         _temperatureTarget = GameObject.FindGameObjectWithTag("Temperature Target");
@@ -84,7 +84,7 @@ public class TemperatureController
 
     private void LowerTempDuringNight()
     {
-        if (DayNightCycle.IsNight)
+        if (_dayNightCycleController.IsNight)
         {
             Temperature -= .5f;
         }
@@ -92,7 +92,7 @@ public class TemperatureController
 
     private void IncreaseTemperatureDuringDay()
     {
-        if (DayNightCycle.IsDay)
+        if (_dayNightCycleController.IsDay)
         {
             Temperature += .5f;
         }
