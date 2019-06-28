@@ -41,7 +41,7 @@ public class TerrainController
                 _startCoroutine.Invoke(ChangeTerrain(_dryMaterial));
             }
         }
-        else if (sceneState == SceneState.Unfavorable && temperature <= 10)
+        else if (sceneState == SceneState.Unfavorable && temperature < 10)
         {
             if ((_currentMaterial != _snowMaterial) && !_lerpingTerrain)
             {

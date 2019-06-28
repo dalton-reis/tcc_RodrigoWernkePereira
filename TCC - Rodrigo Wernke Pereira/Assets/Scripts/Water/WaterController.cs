@@ -14,7 +14,7 @@ public class WaterController {
     }
 
     void Evaporate(float temperature, bool isRaining) {
-        if (temperature > 40f && (!isRaining)) {
+        if (temperature >= 40f && (!isRaining)) {
             _water.GetComponent<Water>().Evaporate();
         }
     }
