@@ -77,10 +77,10 @@ public class WindController
 
             var mappedAngle = Map(targetAngle, 0, 280, 0, 50);
 
-            if (_lastWindForceFromTarget != mappedAngle
-                && _windTargetTransform.localRotation.eulerAngles.y <= 280)
+            if (_lastWindForceFromTarget != mappedAngle && targetAngle <= 280)
             {
                 WindForce = mappedAngle;
+
                 _lastWindForceFromTarget = WindForce;
 
                 _windTextManager.UpdatePanelText(WindForce);

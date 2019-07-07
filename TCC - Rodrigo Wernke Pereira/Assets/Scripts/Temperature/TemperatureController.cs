@@ -9,7 +9,7 @@ public class TemperatureController
 
     private Func<IEnumerator, Coroutine> _startCoroutine;
     private GameObject _temperatureTarget;
-    private Transform _temperatureTargeTransform;
+    private Transform _temperatureTargetTransform;
     private TemperatureTextManager _temperatureTextManager;
     private DayNightCycleController _dayNightCycleController;
     private WaitForSeconds _waitForSeconds;
@@ -25,7 +25,7 @@ public class TemperatureController
 
         _startCoroutine = StartCoroutine;
         _temperatureTarget = GameObject.FindGameObjectWithTag("Temperature Target");
-        _temperatureTargeTransform = _temperatureTarget.transform;
+        _temperatureTargetTransform = _temperatureTarget.transform;
         _waitForSeconds = new WaitForSeconds(1f);
         _lastTempFromTarget = 0f;
 
@@ -44,12 +44,11 @@ public class TemperatureController
 
         if (isBeingTracked)
         {
-            var targetAngle = _temperatureTargeTransform.localRotation.eulerAngles.y;
+            var targetAngle = _temperatureTargetTransform.localRotation.eulerAngles.y;
 
             var mappedAngle = Map(targetAngle, 0, 280, 0, 50);
 
-            if (_lastTempFromTarget != mappedAngle
-                && _temperatureTargeTransform.localRotation.eulerAngles.y < 280)
+            if (_lastTempFromTarget != mappedAngle && targetAngle < 280)
             {
                 Temperature = mappedAngle;
 
