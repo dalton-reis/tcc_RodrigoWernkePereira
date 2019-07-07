@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class SimulationController : MonoBehaviour
 {
+    private DayNightCycleController _dayNightCycleController;
     private WindController _windController;
     private CloudController _cloudController;
     private RainController _rainController;
@@ -20,10 +21,12 @@ public class SimulationController : MonoBehaviour
         Screen.orientation = ScreenOrientation.LandscapeLeft;
 
         _currentSceneState = SceneState.Unfavorable;
+
+        _dayNightCycleController = new DayNightCycleController();
         _windController = new WindController();
         _cloudController = new CloudController(StartCoroutine);
         _rainController = new RainController();
-        _temperatureController = new TemperatureController(StartCoroutine);
+        _temperatureController = new TemperatureController(StartCoroutine, _dayNightCycleController);
         _waterController = new WaterController();
         _terrainController = new TerrainController(StartCoroutine);
         _snowController = new SnowController();
@@ -36,6 +39,7 @@ public class SimulationController : MonoBehaviour
     {
         UpdateSceneState();
 
+        _dayNightCycleController.Update();
         _windController.Update();
         _temperatureController.Update();
         _snowController.Update(_temperatureController.Temperature);

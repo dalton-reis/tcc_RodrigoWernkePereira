@@ -2,35 +2,41 @@
 using TMPro;
 using UnityEngine;
 
-public class DayNightCycleController : MonoBehaviour
+public class DayNightCycleController
 {
     public bool IsNight { get; private set; }
     public bool IsDay { get; private set; }
-    public float DayLengthInSeconds;
+    public float DayLengthInSeconds { get; private set; }
 
-    public GameObject DayInputPanel;
-    public GameObject TimeInputPanel;
-
+    private GameObject _dayInputPanel;
+    private GameObject _timeInputPanel;
+    private GameObject _sunAndMoonRotator;
     private float _rotationAngle;
     private double _rotationPercentage;
     private int _day;
     private int _hour;
     private int _minute;
 
-    private void Start()
+    public DayNightCycleController()
     {
+        DayLengthInSeconds = 30;
         _rotationAngle = 0;
         _rotationPercentage = 0;
         _day = 1;
         _hour = 0;
         _minute = 0;
+        _dayInputPanel = GameObject.Find("DayInput");
+        _timeInputPanel = GameObject.Find("TimeInput");
+        _sunAndMoonRotator = GameObject.Find("Sun And Moon Rotator");
     }
 
-    private void Update()
+    public void Update()
     {
-        transform.Rotate(0, 0, DegreeInSeconds(DayLengthInSeconds) * Time.deltaTime);
+        var degreeInSeconds = DegreeInSeconds(DayLengthInSeconds) * Time.deltaTime;
 
-        _rotationAngle += DegreeInSeconds(DayLengthInSeconds) * Time.deltaTime;
+        _sunAndMoonRotator.transform.Rotate(0, 0, degreeInSeconds);
+
+        _rotationAngle += degreeInSeconds;
 
         _rotationPercentage = ((_rotationAngle / 360) * -1);
 
@@ -40,7 +46,7 @@ public class DayNightCycleController : MonoBehaviour
             _day++;
         }
 
-        TimeOfTheDay();
+        TimeOfDay();
         UpdateTextDisplays();
     }
 
@@ -50,7 +56,7 @@ public class DayNightCycleController : MonoBehaviour
         return (newStart + ((value - originalStart) * scale));
     }
 
-    private void TimeOfTheDay()
+    private void TimeOfDay()
     {
         double decimalTime = ConvertRange(0, 1, 0, 24, _rotationPercentage);
 
@@ -77,7 +83,7 @@ public class DayNightCycleController : MonoBehaviour
 
     private void UpdateTextDisplays()
     {
-        DayInputPanel.GetComponent<TextMeshProUGUI>().text = $"{_day}";
-        TimeInputPanel.GetComponent<TextMeshProUGUI>().text = $"{_hour}:{_minute}";
+        _dayInputPanel.GetComponent<TextMeshProUGUI>().text = $"{_day}";
+        _timeInputPanel.GetComponent<TextMeshProUGUI>().text = $"{_hour}:{_minute}";
     }
 }

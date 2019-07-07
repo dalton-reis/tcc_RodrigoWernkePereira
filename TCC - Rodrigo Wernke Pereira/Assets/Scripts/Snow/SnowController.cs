@@ -8,7 +8,7 @@ public class SnowController
 
     public SnowController()
     {
-        _snowParticleSystem = GameObject.Find("SnowParticleSystem").GetComponent<ParticleSystem>();
+        _snowParticleSystem = GameObject.Find("Snow Particle System").GetComponent<ParticleSystem>();
 
         Snowing = false;
     }

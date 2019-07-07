@@ -23,7 +23,7 @@ public class WindController
         _initialTreeSwaySpeed = 3f;
         _windTarget = GameObject.Find("Wind Target");
         _windTargetTransform = _windTarget.transform;
-        _snowParticleSystem = GameObject.Find("SnowParticleSystem").GetComponent<ParticleSystem>();
+        _snowParticleSystem = GameObject.Find("Snow Particle System").GetComponent<ParticleSystem>();
         _rainParticleSystems = GameObject.Find("Clouds").GetComponentsInChildren<ParticleSystem>();
 
         _lastWindForceFromTarget = 0f;
