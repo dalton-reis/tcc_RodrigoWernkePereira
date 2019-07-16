@@ -1,0 +1,4 @@
+Para alterar a implementação do EcosAR é necessário que você tenha instalado a Unity com a bilibotéca Vufia.
+Abra a pasta raiz do aplicativo com a Unity e utilize o seletor de scenes para escolher a cena desejada.  A aplicação possui duas cenas, a cena Main onde ocorre a simulação e a cena Menu onde fica o menu da aplicação.
+Para utilizar a aplicação, copie o arquivo EcosAR.apk para o seu dispositivo Android e faça a instalação. Inicie a aplicação e clique no botão iniciar para simulação começar. Mire a câmera do dispositivo para os marcadores disponibilizados para visualizar a simulação.
+Para controlar a tempera ou velocidade do vento na simulação, rotacione os marcadores correspondentes.
