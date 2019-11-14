@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
-  <Tracking>
-    <ImageTarget name="Lixeira" size="2.000000 2.026906" />
-    <ImageTarget name="Scene" size="5.000000 4.940618" />
-    <ImageTarget name="Inspector" size="1.000000 1.025641" />
-  </Tracking>
-</QCARConfig>
